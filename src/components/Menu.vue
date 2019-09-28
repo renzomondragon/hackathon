@@ -33,7 +33,7 @@
       <v-list dense>
         <v-list-item-group >
 
-        <v-list-item color="#f7c600" to="/denuncia">       
+        <v-list-item color="#f7c600" to="/maps">       
           <v-list-item-action>
             <v-icon>home</v-icon>
           </v-list-item-action>
@@ -41,7 +41,7 @@
             <v-list-item-title> Registrar Denuncia </v-list-item-title>
           </v-list-item-content>     
        </v-list-item>
-            <v-list-item color="#f7c600" to="/mis-denuncias">
+            <v-list-item color="#f7c600" to="/denuncias">
               <v-list-item-action>
                 <v-icon>dashboard</v-icon>
               </v-list-item-action>
@@ -59,7 +59,7 @@
         </v-list-item>
         <v-list-item color="#f7c600" to="/profile">
           <v-list-item-action>
-            <v-icon>event</v-icon>
+            <v-icon>account_circle</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title> Mi Perfil</v-list-item-title>
@@ -92,16 +92,6 @@ export default {
       email: 'user@el-comercio.com',
       usern:'Denunciante',
     }),
-    computed:{
-        ...mapState(['state'])
-    },
-
-    methods: {
-        CerrarSession() {
-            this.$store.commit('state',false)
-            console.log(this.state)
-        }
-    }
 }
 </script>
 <style>

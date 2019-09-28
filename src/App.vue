@@ -1,12 +1,16 @@
 <template>
 <div>
-  <v-app v-if="state==true">
+  <v-app v-if="estado==true">
     <Login></Login>
-  </v-app>
-  <v-app v-if="state==false"> 
+  </v-app> 
+  <v-app v-if="estado==false"> 
     <NavBar></NavBar>
+    <Contenido></Contenido>
     <Menu></Menu>
-    <Footer></Footer>
+    <Footer></Footer> 
+    
+    <!-- <Profile></Profile> -->
+    <!-- <Maps></Maps> -->
   </v-app>
 </div>
 </template>
@@ -17,6 +21,10 @@ import NavBar from './components/NavBar';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
 import Login from './components/Login';
+import Profile from './components/Profile';
+import Maps from './components/Maps';
+import Contenido from './components/Contenido';
+/* import RegitrarDenuncia from './components/RegistrarDenuncia'; */
 import { mapState } from 'vuex';
 
 export default {
@@ -26,16 +34,20 @@ export default {
     Menu,
     Footer,
     Login,
+    Profile,
+    Maps,
+    Contenido
+
   },
   data: () => ({
 
     //
   }),
   computed: {
-    ...mapState(['state'])
+    ...mapState(['estado'])
   },
   mounted() {
-    console.log(this.state)
+    console.log(this.estado)
   }
 };
 </script>

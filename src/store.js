@@ -5,11 +5,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    state:true
+    estado:true
   },
   mutations: {
     state(state,stateaction){
-      state.state=stateaction
+      state.estado=stateaction
     }
   },
   actions: {
