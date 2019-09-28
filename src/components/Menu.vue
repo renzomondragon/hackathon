@@ -11,7 +11,7 @@
       dark
       color="#000000"
     >
-      <v-list-item  color="#ff4200">
+      <v-list-item  color="#f7c600">
         <v-list-item-avatar >
           <img
              src="https://cdn.vuetifyjs.com/images/john.jpg"
@@ -33,7 +33,7 @@
       <v-list dense>
         <v-list-item-group >
 
-        <v-list-item color="#ff4200" to="/dashboard_jefes">       
+        <v-list-item color="#f7c600" to="/denuncia">       
           <v-list-item-action>
             <v-icon>home</v-icon>
           </v-list-item-action>
@@ -41,7 +41,7 @@
             <v-list-item-title> Registrar Denuncia </v-list-item-title>
           </v-list-item-content>     
        </v-list-item>
-            <v-list-item color="#ff4200" to="/dashboard-ejecutivos">
+            <v-list-item color="#f7c600" to="/mis-denuncias">
               <v-list-item-action>
                 <v-icon>dashboard</v-icon>
               </v-list-item-action>
@@ -49,7 +49,7 @@
                 <v-list-item-title> Mis Denuncias </v-list-item-title>
               </v-list-item-content>
               </v-list-item>
-            <v-list-item color="#ff4200" to="/register-lead">
+            <v-list-item color="#f7c600" to="/zonas-rojas">
               <v-list-item-action>
                 <v-icon>event</v-icon>
               </v-list-item-action>
@@ -57,7 +57,7 @@
             <v-list-item-title> Zonas Rojas </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item color="#ff4200" to="/register-user">
+        <v-list-item color="#f7c600" to="/profile">
           <v-list-item-action>
             <v-icon>event</v-icon>
           </v-list-item-action>
@@ -70,7 +70,7 @@
       </v-list>
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn color="#ff4200" block @click="CerrarSession()">Logout</v-btn>
+          <v-btn color="#f7c600" block @click="CerrarSession()">Logout</v-btn>
         </div>
       </template>
     </v-navigation-drawer>
@@ -92,6 +92,16 @@ export default {
       email: 'user@el-comercio.com',
       usern:'Denunciante',
     }),
+    computed:{
+        ...mapState(['state'])
+    },
+
+    methods: {
+        CerrarSession() {
+            this.$store.commit('state',false)
+            console.log(this.state)
+        }
+    }
 }
 </script>
 <style>
