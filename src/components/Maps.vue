@@ -12,7 +12,7 @@
                         
                       ></v-img>
                     </v-list-item-avatar>
-                    <span class="title font-weight-light">Titulo</span>
+                    <span class="title font-weight-light">{{comisaria.nombre}}</span>
                    
                  </v-list-item>
               
@@ -56,7 +56,7 @@
                 <v-col cols="12">
         <v-row justify="center">
           <v-col cols="6"   md="6" >
-            <v-combobox color="#f7c600" label="Selecciona otra comisaria"></v-combobox>
+            <v-combobox color="#f7c600" :items="Namecomisarias" label="Selecciona otra comisaria"></v-combobox>
           </v-col>
         </v-row>
       </v-col>
@@ -81,17 +81,17 @@
                    
                    <v-row>
                     <v-col cols="6" class="md">
-                     <p> <strong> Comisaria:</strong>  CHUPETIN TRUJILLO</p>
+                     <p> <strong> Comisaria:</strong>  {{comisaria.nombre}}</p>
                     </v-col>
                     <v-col cols="6" class="md">
-                        <p> <strong> Dirección:</strong>  CHUPETIN TRUJILLO</p>
+                        <p> <strong> Dirección:</strong> {{comisaria.direccion}}</p>
+                    </v-col>
+    <!--                 <v-col cols="6" class="md">
+                       <p> <strong> Telefono:</strong>  {{comisaria.telefono}}</p>
                     </v-col>
                     <v-col cols="6" class="md">
-                       <p> <strong> Telefono:</strong>  CHUPETIN TRUJILLO</p>
-                    </v-col>
-                    <v-col cols="6" class="md">
-                        <p> <strong> Encargado:</strong>  CHUPETIN TRUJILLO</p>
-                    </v-col>
+                        <p> <strong> Encargado:</strong>  CHUPETIN</p>
+                    </v-col> -->
                    </v-row>
 
                   </v-list-item>
@@ -106,8 +106,17 @@
   
 </template>
 <script>
+import { mapState } from 'vuex';
 export default {
     data: () => ({
+    comisariaSelected: '',
+    comisaria: {
+        id: '',
+        nombre: '',
+        telefono: '',
+        direccion: '',
+    },
+    Namecomisarias:[],
       /* center: { lat: -12.066134900000002, lng: -77.0368683}, */
       markers: [
           {
@@ -137,11 +146,15 @@ export default {
       places: [],
       currentPlace: null
     }),
-  
+    computed:{
+        /* ...mapState(['comisarias']) */
+    },
     mounted() {
+    this.$store.dispatch('getComisarias')
       this.geolocalizar()  
      this.geolocate();
-     /* this.hallardistancia() */
+     this.getNameComisarias()
+     this.hallardistancia()
     },
     methods: {
     // receives a place object via the autocomplete component
@@ -184,21 +197,20 @@ export default {
     mostrarLoc: function (geo){                   
         this.center.lat=geo.coords.latitude;
         this.center.lng=geo.coords.longitude;
-        console.log('lat',this.center.lat)
-        console.log('long',this.center.lng) 
-        this.hallardistancia()
+        /* this.hallardistancia() */
     },
     hallardistancia(){
-      this.geolocalizar()  
-     /* let diff = Math.sqrt( Math.pow(this.markers[1].position.lng - this.markers[0].position.lng)+ Math.pow(this.markers[1].position.lat - this.markers[0].position.lat) ) */
+      let comisarias = JSON.parse(localStorage.getItem('comisarias'))
       let menor = 999999999999
-        for(let i=0; i< this.markers.length; i++){
+      var indice = 0
+        for(let i=0; i< comisarias.length; i++){
+          console.log('aa')
           let x1 = (this.center.lng).toFixed(5)
-          let x2 = parseFloat((this.markers[i].position.lng).toFixed(5))
+          let x2 = parseFloat((comisarias[i].longuitud).toFixed(5))
           let diff1 = x2-x1
           let diff1pow1 = diff1*diff1
           let y1 = parseFloat((this.center.lat).toFixed(5))
-          let y2 = parseFloat((this.markers[i].position.lat).toFixed(5))
+          let y2 = parseFloat((comisarias[i].latitud).toFixed(5))
           let diff2 = y2-y1
           let diff1pow2 = diff2*diff2
           let potencia = diff1pow2+diff1pow1
@@ -206,12 +218,33 @@ export default {
           console.log(i, 'diff ', diff)
           if(diff<menor){
             menor = diff
-          }
+            indice = i
+            console.log('pos', i)
+            }
         }
-        console.log(menor)
+        this.markers = []
+        this.markers.push(
+                {
+                position: { 
+                lat: comisarias[indice].latitud,
+                lng: comisarias[indice].longuitud,
+                } 
+                 }
+        )
+        this.comisaria.nombre = comisarias[indice].nombre
+        this.comisaria.direccion = comisarias[indice].direccion
+        this.comisaria.id =comisarias[indice].comisariaId
 
+      },
+      getNameComisarias(){
+      let comisarias = JSON.parse(localStorage.getItem('comisarias'))
+      for(let i=0; i< comisarias.length; i++){
+          this.Namecomisarias.push(comisarias[i].nombre)
       }
+  }
   },
+
+  
   
   
  

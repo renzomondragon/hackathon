@@ -4,6 +4,10 @@ import Router from 'vue-router'
 import RegistrarDenuncia from './components/RegistrarDenuncia'
 import Maps from './components/Maps'
 import Profile from './components/Profile'
+import MisDenuncias from './components/MisDenuncias'
+/* import Login from './components/Login' */
+import DashboardDenuncias from './components/DashboardDenuncias'
+import EditarDenuncias from './components/EditarDenuncias'
 
 
 
@@ -26,6 +30,26 @@ const router = new Router({
       path: '/profile',
       name: 'profile',
       component: Profile, 
+    },
+    {
+      path: '/mis_denuncias',
+      name: 'mis_denuncias',
+      component: MisDenuncias, 
+    },
+    /* {
+      path: '/zonas-rojas',
+      name: 'zonas-rojas',
+      component: MisDenuncias, 
+    }, */
+    {
+      path: '/dashboard-denuncias',
+      name: 'dashboard-denuncias',
+      component: DashboardDenuncias, 
+    },
+    {
+      path: '/editar-denuncias',
+      name: 'editar-denuncias',
+      component: EditarDenuncias, 
     },
   ]
 })

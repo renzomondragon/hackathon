@@ -20,7 +20,7 @@
         </v-list-item-avatar>
         <v-list-item-content >
             <v-list-item-title >{{usern}}</v-list-item-title>
-            <v-list-item-subtitle id="subtitle">{{email}}</v-list-item-subtitle>
+            <v-list-item-subtitle id="subtitle">{{correo}}</v-list-item-subtitle>
         </v-list-item-content>
         <v-btn
           icon
@@ -41,7 +41,7 @@
             <v-list-item-title> Registrar Denuncia </v-list-item-title>
           </v-list-item-content>     
        </v-list-item>
-            <v-list-item color="#f7c600" to="/denuncias">
+            <v-list-item color="#f7c600" to="/mis_denuncias">
               <v-list-item-action>
                 <v-icon>dashboard</v-icon>
               </v-list-item-action>
@@ -49,12 +49,28 @@
                 <v-list-item-title> Mis Denuncias </v-list-item-title>
               </v-list-item-content>
               </v-list-item>
-            <v-list-item color="#f7c600" to="/zonas-rojas">
+            <!-- <v-list-item color="#f7c600" to="/zonas-rojas">
               <v-list-item-action>
                 <v-icon>event</v-icon>
               </v-list-item-action>
               <v-list-item-content>
             <v-list-item-title> Zonas Rojas </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item> -->
+        <v-list-item color="#f7c600" to="/dashboard-denuncias">
+              <v-list-item-action>
+                <v-icon>event</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+            <v-list-item-title> Dashboard Denuncias </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item color="#f7c600" to="/editar-denuncias">
+              <v-list-item-action>
+                <v-icon>event</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+            <v-list-item-title> Denuncias Realizadas </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item color="#f7c600" to="/profile">
@@ -70,7 +86,7 @@
       </v-list>
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn color="#f7c600" block @click="CerrarSession()">Logout</v-btn>
+          <v-btn color="#f7c600" block @click="logout()">Logout</v-btn>
         </div>
       </template>
     </v-navigation-drawer>
@@ -85,13 +101,36 @@ import router from '../router'
 
 export default {
     data: () => ({
+     correo:'',
       Usuario: {},
       items: 'HOLA',
       drawer: true,
       mini: true,
-      email: 'user@el-comercio.com',
       usern:'Denunciante',
     }),
+    methods:{
+        logout(){
+            this.$store.dispatch('log')
+            localStorage.removeItem('token')
+            localStorage.removeItem('objects')
+            localStorage.removeItem('estado')
+            localStorage.removeItem('usuario')
+        }
+    },
+    computed:{
+        ...mapState(['localStorageLength', 'otherLenght'])
+    },
+    mounted(){
+        this.correo = JSON.parse(localStorage.getItem('usuario')).email
+        var locals= localStorage.length
+        this.$store.commit('localStorageLength', locals)
+        this.$store.commit('otherLenght', locals) 
+    },
+    updated(){
+        var locals= localStorage.length
+        this.$store.commit('localStorageLength', locals)
+        this.$store.commit('otherLenght', locals) 
+    }
 }
 </script>
 <style>

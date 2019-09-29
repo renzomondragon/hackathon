@@ -16,18 +16,18 @@
 <script>
 /* import TableDash from './TableDash';
 import RegisterLead from './RegisterLead'; */
-import Maps from './Maps'
-import RegistrarDenuncia from './RegistrarDenuncia'
-import MisDenuncias from './MisDenuncias'
+import index from '../components/index'
+import Login from '../components/Login'
+
 
 
 
 
 export default {
     components:{
-        Maps,
-        RegistrarDenuncia,
-        MisDenuncias
+        index,
+        Login,
+
     }
     
 }

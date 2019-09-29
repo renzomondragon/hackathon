@@ -19,7 +19,7 @@
                   <v-col cols="20" sm="6" md="80" class=center>
                     <v-combobox
                       v-model="razon"
-                      :items="Reasons"
+                      :items="tipo"
                       color="#ff4200"
                       label="Seleccionar Tipo Robo"
                     ></v-combobox>
@@ -28,7 +28,7 @@
                 <v-row>    
                   <v-col cols="20" sm="6" md="80" class=center>
                     <v-textarea
-                      v-model="description"
+                      v-model="desc1"
                       color="#ff4200" 
                       height="50"
                       :auto-grow="true"
@@ -39,7 +39,7 @@
 
                     <v-col cols="20" sm="6" md="80" class=center>
                     <v-textarea
-                      v-model="description"
+                      v-model="desc2"
                       color="#ff4200" 
                       height="50"
                       :auto-grow="true"
@@ -56,8 +56,9 @@
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="1000px" class="center">
                 <template  v-slot:activator="{ on }">
-                    <v-btn  style="margin-left: 11px;" dark class="mb-2" v-on="on">Vista Previa Denuncia</v-btn>
+                    <v-btn @click="cargardatos()" style="margin-left: 11px;" dark class="mb-2" v-on="on">Vista Previa Denuncia</v-btn>
                 </template>
+
 
                 <v-card>
                     <v-card-title>
@@ -75,67 +76,67 @@
                             </v-col>
                             <v-col cols="20" sm="6" md="80" class=center >
                                 <v-text-field 
-                                v-model="user.name"
+                                v-model="user.edad"
                                 color="#ff4200" 
                                 label="Edad">
                                 </v-text-field>
                             </v-col>
                             <v-col cols="20" sm="6" md="80" class=center>
                                 <v-combobox
-                                v-model="user.name"
-                                :items="name"
+                                v-model="user.nacionalidad"
+           
                                 color="#ff4200"
                                 label="Seleccionar Nacionalidad"
                                 ></v-combobox>
                             </v-col>
                             <v-col cols="20" sm="6" md="80" class=center>
                                 <v-combobox
-                                v-model="user.name"
-                                :items="name"
+                                v-model="user.estadocivil"
+                          
                                 color="#ff4200"
                                 label="Seleccionar Estado Civil"
                                 ></v-combobox>
                             </v-col>
                             <v-col cols="20" sm="6" md="80" class=center >
                                 <v-text-field 
-                                v-model="user.name"
+                                v-model="user.ocupacion"
                                 color="#ff4200" 
                                 label="Ocupación">
                                 </v-text-field>
                             </v-col>
                             <v-col cols="20" sm="6" md="80" class=center >
                                 <v-text-field 
-                                v-model="user.name"
+                                v-model="user.domicilio"
                                 color="#ff4200" 
                                 label="Domicilio">
                                 </v-text-field>
                             </v-col>
                             <v-col cols="20" sm="6" md="80" class=center>
                                 <v-combobox
-                                v-model="user.name"
-                                :items="name"
+                                v-model="user.documento"
+
                                 color="#ff4200"
                                 label="Seleccionar Documento Identidad"
                                 ></v-combobox>
                             </v-col>
                             <v-col cols="20" sm="6" md="80" class=center >
                                 <v-text-field 
-                                v-model="user.name"
+                                v-model="user.dni"
                                 color="#ff4200" 
                                 label="Ingresar Número de Documento">
                                 </v-text-field>
                             </v-col>
                             <v-col cols="20" sm="6" md="80" class=center >
                                 <v-text-field 
-                                v-model="user.name"
+                                v-model="user.email"
                                 color="#ff4200" 
                                 label="E-mail">
                                 </v-text-field>
                             </v-col>
                             <v-col cols="20" sm="6" md="80" class=center>
                                 <v-combobox
-                                v-model="razon"
-                                :items="Reasons"
+                                v-model="user.razon"
+                                :items="tipo"
                                 color="#ff4200"
                                 label="Seleccionar Tipo Robo"
                                 ></v-combobox>
@@ -143,7 +144,7 @@
 
                             <v-col cols="20" sm="6" md="80" class=center>
                                 <v-textarea
-                                v-model="description"
+                                v-model="user.desc1"
                                 color="#ff4200" 
                                 height="80"
                                 :auto-grow="true"
@@ -154,7 +155,7 @@
 
                                 <v-col cols="20" sm="6" md="80" class=center>
                                 <v-textarea
-                                v-model="description"
+                                v-model="user.desc2"
                                 color="#ff4200" 
                                 height="80"
                                 :auto-grow="true"
@@ -190,20 +191,88 @@ import { mapActions, mapState } from 'vuex'
 import axios from 'axios'
 export default {
     data: () => ({
+      dialog: false,
+      nacionalidades:[],
       estado:'',
+      razon: '',
+      desc1: '',
+      desc2: '',
+      tipo: ['Sustracción', 'Asalto', 'Arrebato'],
       user:{
-        userId: 0,
-        username: '',
-        active: true,
-        email: '',
-        groupSegment: '',
+        userId: '',
         name: '',
-        lastName: '',
-        manager: '',
+        edad: true,
+        nacionalidad: '',
+        estadocivil: '',
+        ocupacion: '',
+        domicilio: '',
+        documento: '',
+        email: '',
         password: '',
-        role: ''
+        dni: '',
+        razon:''
       },
       show1: false,
     }),
+    computed: {
+        ...mapState(['token'])
+    },
+    mounted(){
+        this.cargardatos()
+    },
+    methods:{
+        cargardatos(){
+            let nacionalidades = JSON.parse(localStorage.getItem('nacionalidades'))
+            this.nacionalidades = nacionalidades
+            let usuario = JSON.parse(localStorage.getItem('usuario'))
+            console.log(usuario)
+            
+            this.user.userId = usuario.usuarioId
+            this.user.name  = usuario.nombreCompleto 
+            this.user.edad  = usuario.usuarioId 
+            this.user.nacionalidad  = usuario.nacionalidad 
+            this.user.estadocivil  = usuario.estadoCivil 
+            this.user.ocupacion  = usuario.ocupacion 
+            this.user.domicilio  = usuario.domicilio 
+            this.user.documento  = usuario.documento 
+            this.user.email  = usuario.email 
+            this.user.password = usuario.password 
+            this.user.dni = usuario.numeroDeDocumento 
+            this.user.razon = this.razon
+            this.user.desc1 = this.desc1
+            this.user.desc2 = this.desc2
+        },
+      save(){
+
+          this.dialog = false
+          this.user = {}
+       },
+
+       async addDenuncia(){
+        var datos={
+            "ubicacion": "Av. Petit Thouars cdra 6",
+            "descripcion": this.user.desc1,
+            "descripcionImplicado": this.user.desc2,
+            "tipoRobo": this.user.razon,
+            "usuario": this.user.name,
+            "estado": "Iniciado",
+            "comisaria": "Comisaria Petit Thouars",
+        }
+      let config = {
+        headers: {
+          'Authorization': 'Bearer ' + this.token
+        }  
+      }
+      let url = 'https://hackaton2019utp.azurewebsites.net/usuario/denuncias'
+      await axios.post(url, datos, config)
+      .then(response => { 
+        localStorage.setItem('misdenuncias', JSON.stringify(response.data))
+        this.$store.commit('misdenuncias', response.data)
+      }).catch(error => {
+        console.log('Hubo un error ', error)
+      })
+    },
+
+    }
 }
 </script>
